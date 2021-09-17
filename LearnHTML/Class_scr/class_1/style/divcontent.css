@@ -1,0 +1,24 @@
+#divcontent {
+	width: 900px;
+	background-color: #FCFDEF;
+	border: 1px solid #EEEDDB;
+	MARGIN-RIGHT: auto;
+	MARGIN-LEFT: auto;
+}
+
+#divcontent .div{
+	position: relative;
+	width: auto;
+	height: 250px;
+    /* <!-- 250像素的高度保证高度不会覆盖 --> */
+}
+
+/* //热卖榜的CSS文件 */
+#divcontent .book{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 400px;
+	/* //热卖榜的宽度规定400像素,防止覆盖 */
+	height: auto;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <link href="../style/main.css" rel="stylesheet">
+    <!-- 顶部的CSS文件 -->
+    <link href="../style/divmenu.css" rel="stylesheet">
+    <!-- 菜单的CSS文件 -->
+    <link href="../style/autoplay.css" rel="stylesheet">
+    <!-- 轮播图的CSS文件 -->
+    <link href="../style/divfoot.css" rel="stylesheet">
+    <!-- 底部的CSS文件 -->
+    <link href="../style/divcontent.css" rel="stylesheet">
+    <!-- 其它区域的CSS文件 -->
+    <link href="../style/divsearch.css" rel="stylesheet">
+    <!-- 搜索部分的CSS文件 -->
+
+    <style type="text/css">
+    </style>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>首页</title>
+</head>
+
+<body class="main">
+    <!-- 1.网上书城顶部 start -->
+    <div id="divhead">
+        <table style="width: 100%;" cellspacing="0" class="headtable">
+            <!-- 宽设置为100%,使购物车那一栏向右靠齐 -->
+                <tr>
+                    <td>
+                        <a href="#">
+                            <img src="../images/logo.png" width="200" height="60" border="0" />
+                        </a>
+                    </td>
+                    <!--此单元格样式靠右边对齐-->
+                    <td style="text-align:right;">
+                        <img src="../images/cart.gif" width="26" height="23" style="margin-bottom:-4px" />&nbsp;<a
+                            href="#">购物车</a>
+                        | <a href="#">帮助中心</a>
+                        | <a href="#">我的帐户</a>
+                        | <a href="register.html">新用户注册</a>
+                    </td>
+                </tr>
+            </table>
+    </div>
+    <!-- 网上书城顶部  end -->
+
+    <!--2. 网上书城菜单列表  start -->
+    <div id="divmenu">
+        <td style="width: 100%;">
+            <a href="#">文学</a>
+            <a href="#">生活</a>
+            <a href="#">计算机</a>
+            <a href="#">外语</a>
+            <a href="#">经营</a>
+            <a href="#">励志</a>
+            <a href="#">社科</a>
+            <a href="#">学术</a>
+            <a href="#">少儿</a>
+            <a href="#">艺术</a>
+            <a href="#">原版</a>
+            <a href="#">科技</a>
+            <a href="#">考试</a>
+            <a href="#">生活百科</a>
+            <a style="color: yellow;" href="#">全部商品目录</a>
+        </td>
+    </div>
+    <!-- 网上书城菜单列表  end -->
+
+    <div id="divsearch">
+        <form action="#" id="searchform">
+            <table width="100%" border="0" cellspacing="0">
+                <tr>
+                    <!--样式中 右内边距定位-->
+                    <td style="text-align:right; padding-right:220px">
+                        Search
+                        <input type="text" name="textfield" class="inputtable" id="textfield" value="请输入书名"
+                            onmouseover="this.focus();" onclick="my_click(this, 'textfield');"
+                            onBlur="my_blur(this, 'textfield');" />
+                            <!-- 点击输入框的监听器 -->
+                        <a href="#">
+                            <img src="../images/serchbutton.gif" border="0" style="margin-bottom:-4px"
+                                onClick="search()" />
+                                <!-- 点击搜索按钮后进行搜索 -->
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!-- 3.网上书城首页轮播图  start -->
+    <div id="banner">
+        <div id="box_autoplay">
+            <div class="list" id="images">
+                <!-- 轮播图的广告页面 -->
+                <img src="../ad/index_ad1.jpg" />
+                <img src="../ad/index_ad2.jpg" />
+                <img src="../ad/index_ad3.jpg" />
+                <img src="../ad/index_ad4.jpg" />
+                <img src="../ad/index_ad5.jpg" />
+            </div>
+            <div class="btn" id="btns">
+                <!-- 轮播图的5个随之变换的点,具体设置在CSS文件中 -->
+                <span class></span>
+                <span class></span>
+                <span class></span>
+                <span class></span>
+                <span class></span>
+                <div class="clear"></div>
+            </div>
+            <!-- javascript文件对轮播图的行为进行编写 -->
+            <script src="../js/autoplay.js" async defer></script>
+        </div>
+    </div>
+    <!-- 网上书城首页轮播图  end -->
+
+    <!--4. 公告板和本周热卖  start -->
+    <div id="divcontent">
+        <div class="div">
+            <img src="../images/billboard.gif">
+            <div style="width: 500px;">
+                <!-- &nbsp;&nbsp;&nbsp;&nbsp;暂无公告 -->
+                    尊敬的网上书城用户：
+                </br>为了让大家有更好的购物体验，3月25日对网上书城进行维护升级。
+                </br>具体开放时间请留意公告！感谢大家的理解与支持！祝大家购物愉快！
+                </br>3月23日
+                </br>网上书城管理部
+            </div>
+            <div class="book">
+                <img style="padding-left: 20px;" src="../images/hottitle.gif">
+                <div style="padding-left: 20px;">
+                    <img style="width: 150px; height: 200px;" src="../bookcover/101.jpg">
+                    <img style="width: 150px; height: 200px;" src="../bookcover/104.jpg">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 公告板和本周热卖  end -->
+
+    <!--5. 网上书城底部 start -->
+    <div id="divfoot">
+        <table width="100%" border="0" cellspacing="0">
+            <tr>
+                <td rowspan="2" style="width:10%">
+                    <img src="../images/logo.png" width="195" height="50" style="margin-left:175px" />
+                </td>
+                <td style="padding-top:5px; padding-left:50px">
+                    <a href="#">
+                        <font color="#747556"><b>CONTACT US</b></font>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-left:50px">
+                    <font color="#CCCCCC">
+                        <b>COPYRIGHT 2015 &copy; BookStore All Rights RESERVED.</b>
+                    </font>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- 网上书城底部  end -->
+</body>
+
+</html>

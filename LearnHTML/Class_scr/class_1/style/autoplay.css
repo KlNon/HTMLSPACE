@@ -1,0 +1,65 @@
+/* <!-- 预定义一些值方便使用和更改 --> */
+* {
+    margin:0;
+    padding:0;
+    --imageWidth:900px;
+    --height:335px;
+}
+
+.clear {
+    clear:both;
+}
+
+#banner {
+	text-align: center;
+	margin:0 auto;
+    width:calc(var(--imageWidth));
+	padding: 10px;
+}
+
+#box_autoplay {
+	position:relative;
+	width:var(--imageWidth);
+	height:var(--height);
+	overflow: hidden;
+	background:#fff;
+}
+
+/* <!-- 对包含所有按钮的块进行位置和大小上的定义 --> */
+#box_autoplay .btn{
+	position: absolute;
+    /* 绝对定位 */
+	left: 36px;
+	bottom: 12px;
+	z-index: 2;
+}
+
+/* <!-- 对span进行定义,并且使它的样式为圆形 --> */
+#box_autoplay .btn span{
+	display: inline-block;
+    /* 在同一行显示 */
+    margin-left: 10px;
+    
+    width: 10px;
+    height: 10px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+#box_autoplay .list {
+    position:absolute;
+	left: 0px;
+    z-index: 1;
+    width:calc(var(--imageWidth)*5);
+    height:var(--height);
+    transition: all 1s;
+}
+/* <!-- 对list中的图片进行定义,让它们水平对齐,同时使它们的长宽一致 --> */
+#box_autoplay .list img {
+	float:left;
+    width:var(--imageWidth);
+    height:var(--height);
+}

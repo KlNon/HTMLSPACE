@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<link href="../style/common.css" type="text/css" rel="stylesheet">
+
+<head>
+    <title>使用CSS内嵌式</title>
+    <style type="text/css">
+        /* 此处是用于class的 */
+        /* 类选择器 */
+        .red {
+            color: red;
+        }
+
+        /* id选择器 */
+        /* id选择器只能对应一个标签,因为在JavaScript中id是唯一的 */
+        #bold {
+            font-weight: bold;
+        }
+
+        #font24 {
+            font-size: 24px;
+        }
+
+
+        /* h2 {
+            text-align: center;
+        }
+
+        div {
+            border: 1px solid #ccc;
+            width: 300px;
+            height: 80px;
+            color: purple;
+        } */
+    </style>
+</head>
+
+<body>
+    <h2 class="red"> 内嵌式CSS样式</h2>
+    <p id="font24">使用HTML制作网页时，
+        <span>通过br标签</span>可以实现<br />换行效果
+    </p>
+
+    <div>
+        使用style标记可定义内嵌式CSS样式表,style标记一般位于head头部标记中,
+        title标记之后
+    </div>
+    <h2 style="color: blue;">内嵌式CSS样式</h2>
+</body>
+
+</html>
