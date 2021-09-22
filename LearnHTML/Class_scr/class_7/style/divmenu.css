@@ -1,0 +1,30 @@
+#divmenu {
+    padding: 5px;
+    text-align:center;
+	width: 100%;
+    background-color: #000000;
+	}
+
+    #divmenu a {
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        color: #FFFFFF;
+        padding: 10px 10px 10px 30px;
+    }
+
+    #divmenu a:link {
+        font-weight: bold;
+    }
+
+    #divmenu a:visited {
+        color: #FFFFFF;
+    }
+
+    #divmenu a:hover {
+        color: #999999; /*ÑÕÉ«±ä»»*/
+    }
+
+    #divmenu a:active {
+        color: #FFFFFF;
+    }

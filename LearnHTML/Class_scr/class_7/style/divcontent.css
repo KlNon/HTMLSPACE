@@ -1,0 +1,20 @@
+#divcontent {
+	width: 900px;
+	background-color: #FCFDEF;
+	border: 1px solid #EEEDDB;
+	MARGIN-RIGHT: auto;
+	MARGIN-LEFT: auto;
+}
+
+#divcontent .div{
+	position: relative;
+	width: auto;
+	height: 250px;
+}
+#divcontent .book{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 400px;
+	height: auto;
+}

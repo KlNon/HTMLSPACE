@@ -1,0 +1,9 @@
+#divhead {
+	width: 100%;
+}
+#divhead a{
+	text-decoration: none;
+}
+.headtable td {
+	padding: 10px 50px 25px 135px;
+}
