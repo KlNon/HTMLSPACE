@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<title>变色表格实例</title>
+		<script language="JavaScript">
+			function change(row){
+				document.getElementById(row).style.backgroundColor = '#ccccff';
+			}
+			function reset(row){
+				document.getElementById(row).style.backgroundColor = '';
+			}
+		</script>
+	</head>
+	<body>
+		<table width='200px' border="1" cellpadding="1" align="center">
+			<tr><th>学校</th><th>专业</th><th>人数</th></tr>
+			<tr align="center" id="row1" onmouseover="change('row1')" onmouseout="reset('row1')"><td>北大</td><td>数学</td><td>2000</td></tr>
+			<tr align="center" id="row2" onmouseover="change('row2')" onmouseout="reset('row2')"><td>清华</td><td>计算机</td><td>5000</td></tr>
+			<tr align="center" id="row3" onmouseover="change('row3')" onmouseout="reset('row3')"><td>北邮</td><td>电子工程</td><td>2400</td></tr>
+			<tr align="center" id="row4" onmouseover="change('row4')" onmouseout="reset('row4')"><td>复旦</td><td>新闻</td><td>3000</td></tr>
+		</table>
+	</body>
+</html>

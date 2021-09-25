@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title>下拉菜单实例</title>
+		<script language="JavaScript">
+			function show(menu){
+				document.getElementById(menu).style.visibility = "visible";
+			}
+			function hide(){
+				document.getElementById("menu1").style.visibility ="hidden";
+				document.getElementById("menu2").style.visibility ="hidden";
+				document.getElementById("menu3").style.visibility ="hidden";
+			}
+		</script>
+	</head>
+	<body>
+		<table>
+			<tr bgcolor="#9999ff" align="center">
+				<td width="120" onmousemove="show('menu1')" onmouseout="hide()">系列课程</td>
+				<td width="120" onmousemove="show('menu2')" onmouseout="hide()">教学课件</td>
+				<td width="120" onmousemove="show('menu3')" onmouseout="hide()">课程大纲</td>
+			</tr>
+		</table>
+		<div id="menu1" onmousemove="show('menu1')" onmouseout="hide()" style="background: #9999ff;position:absolute;left:12px;top:38;width:120;visibility: hidden">
+			<span>C++程序设计</span><br/>
+			<span>Java程序设计</span><br/>
+			<span>Python程序设计</span><br/>
+		</div>
+		<div id="menu2" onmousemove="show('menu2')" onmouseout="hide()" style="background: #9999ff;position:absolute;left:137px;top:38;width:120;visibility: hidden">
+			<span>C++课件</span><br/>
+			<span>Java课件</span><br/>
+			<span>Python课件</span><br/>
+		</div>
+		<div id="menu3" onmousemove="show('menu3')" onmouseout="hide()" style="background: #9999ff;position:absolute;left:260px;top:38;width:120;visibility: hidden">
+			<span>C++大纲</span><br/>
+			<span>Java大纲</span><br/>
+			<span>Python大纲</span><br/>
+		</div>
+	</body>
+</html>

@@ -9,9 +9,13 @@
     <link href="../style/divcontent.css" rel="stylesheet">
     <link href="../style/divsearch.css" rel="stylesheet">
 
+    <link type="text/css" rel="stylesheet" href="../../bootstrap-5.1.1-dist/css/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="../../bootstrap-5.1.1-dist/css/bootstrap-grid.css">
+    <link type="text/css" rel="stylesheet" href="../../bootstrap-5.1.1-dist/css/style.css">
+
     <style type="text/css">
     </style>
-    <script src="../js/REG.JS" async defer></script>
+    <script src="../js/form2.JS" async defer></script>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>首页</title>
@@ -90,29 +94,30 @@
                 <div class="col">
                     <!-- email类型的输入框,输入框中提示为"会员邮箱" -->
                     <small class="form-text text-muted">电子邮箱:</small>
-                    <input type="email" class="form-control" placeholder="会员邮箱">
-                    <small id="emailHelp" class="form-text text-muted" style="color: #999999;">请输入有效邮箱地址.</small>
+                    <input id="email" type="email" class="form-control" placeholder="会员邮箱" onKeyUp="checkEmail();">
+                    <span id="emailMsg"></span>
+                    <small class="form-text text-muted" style="color: #999999;">请输入有效邮箱地址.</small>
                 </div>
                 <div class="col">
                     <small class="form-text text-muted">会员名:</small>
-                    <input type="username" class="form-control" placeholder="会员名">
-                    <small id="usernameHelp" class="form-text text-muted" style="color: #999999;">字母数字下划线1到10位,不能数字开头</small>
+                    <input id="username" type="username" class="form-control" placeholder="会员名" onKeyUp="checkUsername();">
+                    <span id="usernameMsg"></span>
+                    <small class="form-text text-muted" style="color: #999999;">字母数字下划线1到10位,不能数字开头</small>
                 </div>
                 <div class="col">
                     <small class="form-text text-muted">密码:</small>
-                    <input type="password" class="form-control" placeholder="密码">
-                    <small id="passwordHelp" class="form-text text-muted" style="color: #999999;">请设置6-16位字符:</small>
-
+                    <input id="password" type="password" class="form-control" placeholder="密码" onKeyUp="checkPassword();checkConfirm();">
+                    <span id="passwordMsg"></span>
+                    <small class="form-text text-muted" style="color: #999999;">请设置6-16位字符:</small>
                 </div>
                 <div class="col">
-
                     <small class="form-text text-muted">密码:</small>
-                    <input type="password" class="form-control" placeholder="请重复一遍密码">
-                    <small id="password2Help" class="form-text text-muted" style="color: #999999;">请重复一遍密码</small>
-
+                    <input id="repassword" type="password" class="form-control" placeholder="请重复一遍密码" onKeyUp="checkConfirm();">
+                    <span id="confirmMsg"></span>
+                    <small class="form-text text-muted" style="color: #999999;">请重复一遍密码</small>
                 </div>
                 <div class="form-group">
-                    <label for="exampleFormControlSelect1">性别:</label>
+                    <small class="form-text text-muted">性别:</small>
                     <select class="form-control" id="exampleFormControlSelect1">
                         <option>男</option>
                         <option>女</option>
@@ -121,88 +126,15 @@
                 <div class="col">
                     <small class="form-text text-muted">手机号码:</small>
                     <input type="phoneNumber" class="form-control" placeholder="手机号码">
-                    <small id="phoneNumberHelp" class="form-text text-muted" style="color: #999999;"></small>
+                    <small id="phoneNumberHelp" class="form-text text-muted" style="color: #999999;">请输入正确的手机号码</small>
+                </div>
+                <div class="col">
+                    <small class="form-text text-muted">个人介绍:</small>
+                    <textarea name="introduce" id="introduce" class="form-control" rows="3" required="required"></textarea>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">注册</button>
         </form>
-        <!-- <form action="registersuccess.html" method="post" onSubmit="return checkForm();">
-            <table width="850px" border="0" cellspacing="0">
-                <tr>
-                    <td style="padding: 30px">
-                        <h1>新会员注册</h1>
-                        <table width="70%" border="0" cellspacing="2" class="upline">
-                            <tr>
-                                <td style="text-align: right; width: 20%">会员邮箱：</td>
-                                <td style="width: 40%">
-                                    <input type="text" class="textinput" id="email" name="email" onKeyUp="checkEmail();"
-                                        required />
-                                </td>
-                                <td colspan="2"><span id="emailMsg"></span>
-                                    <font color="#999999">请输入有效的邮箱地址</font>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: right">会员名：</td>
-                                <td><input type="text" class="textinput" id="username" name="username"
-                                        onKeyUp="checkUsername();" />
-                                </td>
-                                <td colspan="2"><span id="usernameMsg"></span>
-                                    <font color="#999999">字母数字下划线1到10位, 不能是数字开头</font>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: right">密码：</td>
-                                <td><input type="password" class="textinput" id="password" name="password"
-                                        onKeyUp="checkPassword();" /></td>
-                                <td><span id="passwordMsg"></span>
-                                    <font color="#999999">密码请设置6-16位字符</font>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: right">重复密码：</td>
-                                <td>
-                                    <input type="password" class="textinput" id="repassword" name="repassword"
-                                        onKeyUp="checkConfirm();" />
-                                </td>
-                                <td><span id="confirmMsg"></span>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: right">性别：</td>
-                                <td colspan="2">&nbsp;&nbsp;
-                                    <input type="radio" name="gender" value="男" checked="checked" /> 男
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="radio" name="gender" value="女" /> 女
-                                </td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: right">联系电话：</td>
-                                <td colspan="2">
-                                    <input type="text" class="textinput" style="width: 350px" name="telephone" />
-                                </td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: right">个人介绍：</td>
-                                <td colspan="2">
-                                    <textarea class="textarea" name="introduce"></textarea>
-                                </td>
-                                <td>&nbsp;</td>
-                            </tr>
-                        </table>
-
-                        <table width="70%" border="0" cellspacing="0">
-                            <tr>
-                                <td style="padding-top: 20px; text-align: center">
-                                    <input type="image" src="../images/signup.gif" name="submit" border="0" />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </form> -->
     </div>
     <!-- 注册页面结束 -->
 
