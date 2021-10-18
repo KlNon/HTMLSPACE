@@ -1102,7 +1102,63 @@ Web服务器：Tomcat 8 以上
 
 ## 六．实验内容及步骤
 ### 1.了解Maven
+![运行结果截图1...N](A.png)
+## pom.xml
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.example</groupId>
+    <artifactId>javaWebTest</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>javaWebTest</name>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <junit.version>5.7.0</junit.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.5.v20170502</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
 ### 2. Servlet的用法：使用IDEA新建Maven Web工程，新建一个Servlet，在客户端输出 Hello World，跟踪生命周期三个阶段，理解注解工作原理。
 
 ![运行结果截图1...N](xiangmu.png)
@@ -1166,6 +1222,163 @@ public void doGet(HttpServletRequest request, HttpServletResponse response) thro
 
 ```
 ![运行结果截图1...N](helloworld2.png)
+
+### 4. RequestDispatcher的用法：请求重定向、RequestDispatcher实现请求转发并利用request传递数据，获取请求参数
+#### 重定向
+```java
+/*文件4-12、4-13、4-14*/
+//webPage.java
+@WebServlet(name = "webPage", value = "/webpage")
+public class webPage extends HttpServlet {
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=gb2312");//文本格式为HTML,输出字符集为GB2312
+//        request.getRequestDispatcher("/login.jsp").forward(request,response);
+        String userName = request.getParameter("userName");
+        String password = request.getParameter("password");
+        System.err.println(userName+";"+password);
+        String myUser = "root";
+        String myPwd = "123456";
+        System.err.println("aaa"+userName.equals(myUser)+";"+password.equals(myPwd));
+        PrintWriter out = response.getWriter();
+        if(userName.equals(myUser)&&password.equals(myPwd)) {
+            System.err.println("success");
+            response.sendRedirect("Ok.jsp");
+        }else {
+            System.err.println("defeat");
+            out.println("登陆失败");
+            request.getRequestDispatcher("login.jsp").include(request, response);
+
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+
+    public void destroy() {
+        super.destroy();
+    }
+}
+```
+```javascript
+//login.jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>标题</title>
+    <style type="text/css">
+        *{margin: 0;padding: 0;}
+        form{margin: 0 auto;padding:15px; width: 300px;height:300px;text-align: center;}
+        #submit{padding: 10px}
+        #submit input{width: 50px;height: 24px;}
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <form action="webpage" method="post">
+        <label>用户名:<input type="text" name="userName" value="${param.userName}"/><br><br></label>
+
+        <label>密码：<input type="password" name="password"/><br></label>
+
+        <div id="submit">
+            <input type="submit" value="登录"/>
+        </div>
+    </form>
+
+</div>
+</body>
+
+
+//Ok.jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Ok</title>
+</head>
+<body>
+<h1><%= "OK,登录成功!" %>
+</body>
+</html>
+```
+
+![运行结果截图1...N](denglu.png)
+![运行结果截图1...N](dl1.png)
+![运行结果截图1...N](dl2.png)
+
+#### 利用request传递数据
+```java
+@WebServlet(name = "webPage", value = "/webpage")
+public class webPage extends HttpServlet {
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");//文本格式为HTML,输出字符集为GB2312
+        String userName = request.getParameter("userName");
+        String password = request.getParameter("password");
+        System.err.println(userName+";"+password);
+        String myUser = "root";
+        String myPwd = "123456";
+        System.err.println("账号验证"+userName.equals(myUser)+";"+password.equals(myPwd));
+        PrintWriter out = response.getWriter();
+        if(userName.equals(myUser)&&password.equals(myPwd)) {
+            System.err.println("success");
+            request.setAttribute("username",userName);
+
+//            response.sendRedirect("ResultServlet");//这个再定向会丢失数据,不能利用request传输数据
+            request.getRequestDispatcher("ResultServlet").include(request, response);//这个再定向不会丢失数据,可以向后面传数据
+
+        }else {
+            System.err.println("defeat");
+            out.println("登陆失败");
+            //.include(request, response)将这个包含的资源（JSP,Servlet，HTML）的响应数据包含到自己的响应体中。被包含的数据是在服务器上经过运行产生的，因此是动态包含
+            request.getRequestDispatcher("login.jsp").include(request, response);//不会丢失数据,且再定向后输入栏有数据
+//            request.getRequestDispatcher("login.jsp").forward(request, response);//不会丢失数据,再定向后输入栏无数据
+//            两者都可以利用request传数据
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+
+    public void destroy() {
+        super.destroy();
+    }
+}
+
+```
+
+```java
+@WebServlet(name = "ResultServlet", value = "/ResultServlet")
+public class ResultServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out =response.getWriter();
+        String username = (String) request.getAttribute("username");
+        if(username!=null){
+            out.println("<html><body><h2>");
+            out.println("欢迎用户名: "+username +"<br/>");
+            out.println("<h2><body><html>");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request,response);
+    }
+}
+```
+![运行结果截图1...N](login_root.png)
+![运行结果截图1...N](welcome_root.png)
+#### 在控制台显示内容
 ```html
 <!DOCTYPE html>
 <html>
@@ -1214,97 +1427,66 @@ public class RequestParamsServlet extends HttpServlet {
 ![运行结果截图1...N](111.png)
 ![运行结果截图1...N](222.png)
 ![运行结果截图1...N](333.png)
-### 4. RequestDispatcher的用法：请求重定向、RequestDispatcher实现请求转发并利用request传递数据，获取请求参数
+### 5. Cookie的用法：显示用户上次访问时间
 ```java
-/*文件4-12、4-13、4-14*/
-//webPage.java
-@WebServlet(name = "webPage", value = "/webpage")
-public class webPage extends HttpServlet {
-
-
+@WebServlet(name = "LastAccessServlet", value = "/LastAccessServlet")
+public class LastAccessServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=gb2312");//文本格式为HTML,输出字符集为GB2312
-//        request.getRequestDispatcher("/login.jsp").forward(request,response);
-        String userName = request.getParameter("userName");
-        String password = request.getParameter("password");
-        System.err.println(userName+";"+password);
-        String myUser = "root";
-        String myPwd = "123456";
-        System.err.println("aaa"+userName.equals(myUser)+";"+password.equals(myPwd));
-        PrintWriter out = response.getWriter();
-        if(userName.equals(myUser)&&password.equals(myPwd)) {
-            System.err.println("success");
-            response.sendRedirect("Ok.jsp");
-        }else {
-            System.err.println("defeat");
-            out.println("登陆失败");
-            request.getRequestDispatcher("login.jsp").include(request, response);
+        response.setContentType("text/html;charset=utf-8");//指定编码方式为UTF-8,防止乱码
+        Cookie[] cookies= request.getCookies();//获得所有cookie
+        boolean flag=false;//判断cookie是否为空
+        if(cookies.length >0&&cookies!=null)
+        {
+            for(Cookie cookie:cookies){//遍历cookie
+                String name=cookie.getName();//获取cookie名字
+                if("lastTime".equals(name)){//判断是否是选中的cookie
+                    flag=true;//该cookie不是第一次访问
+                    String value=cookie.getValue();//获取上次的响应时间
+                    System.out.println("解码前:"+value);//在控制面板输出时间
+                    value= URLDecoder.decode(value,"utf-8");//URL解码
+                    System.out.println("解码后:"+value);//控制面板输出
+                    response.getWriter().write("WelcomeBack,您上次方位时间"+"为:"+value);//在网页显示时间
+                    //获取当前时间的字符串,重新设置cookie的值,重新发送cookie
+                    Date date=new Date();
+                    SimpleDateFormat timesdf=new SimpleDateFormat("yyyy年MM"+"月dd日 HH:mm:ss");
+                    String str_time=timesdf.format(date);
+                    System.out.println("编码前: "+str_time);
+                    str_time= URLEncoder.encode(str_time,"utf-8");//URL编码
+                    System.out.println("编码前: "+str_time);
+                    cookie.setValue(str_time);
+                    cookie.setMaxAge(60*60*24*30);//设置cookie的存活时间为一个月
+                    //加入当前cookie的请求时间
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
 
+            //如果cookie中无时间,则未访问过,就需要添加cookie
+            if(cookies==null||cookies.length==0||flag==false){
+                //获取当前时间的字符串,重新设置cookie的值,重新发送cookie
+                Date date =new Date();
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM"+"月dd日 HH:mm:ss");
+                String str_date=sdf.format(date);
+                System.out.println("编码前: "+str_date);
+                str_date= URLEncoder.encode(str_date,"utf-8");
+                System.out.println("编码前: "+str_date);
+                Cookie cookie=new Cookie("lastTime",str_date);
+                cookie.setMaxAge(60*60*24*30);
+                response.addCookie(cookie);
+                response.getWriter().write("您好,欢迎访问");
+            }
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    }
-
-    public void destroy() {
-        super.destroy();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request,response);
     }
 }
-
-
-//login.jsp
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>标题</title>
-    <style type="text/css">
-        *{margin: 0;padding: 0;}
-        form{margin: 0 auto;padding:15px; width: 300px;height:300px;text-align: center;}
-        #submit{padding: 10px}
-        #submit input{width: 50px;height: 24px;}
-    </style>
-</head>
-<body>
-<div class="wrapper">
-    <form action="webpage" method="post">
-        <label>用户名:<input type="text" name="userName" value="${param.userName}"/><br><br></label>
-
-        <label>密码：<input type="password" name="password"/><br></label>
-
-        <div id="submit">
-            <input type="submit" value="登录"/>
-        </div>
-    </form>
-
-</div>
-</body>
-
-
-//Ok.jsp
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Ok</title>
-</head>
-<body>
-<h1><%= "OK,登录成功!" %>
-</body>
-</html>
 ```
-
-![运行结果截图1...N](denglu.png)
-![运行结果截图1...N](dl1.png)
-![运行结果截图1...N](dl2.png)
-
-### 5. Cookie的用法：显示用户上次访问时间
-```java
-/*文件5-1*/
-```
-![运行结果截图1...N]()
+![运行结果截图1...N](A1.PNG)
+![运行结果截图1...N](A2.PNG)
 
 ### 6. Session的用法：Session实现用户登录、实现购物车
 ``` java
