@@ -1491,13 +1491,249 @@ public class LastAccessServlet extends HttpServlet {
 ### 6. Session的用法：Session实现用户登录、实现购物车
 ``` java
 /*文件5-2、文件5-3、文件5-4、文件5-5、文件5-6*/
+//5-2
+public class Cake {
+    private static final long serialVersionUID=1L;
+    private String id;
+    private String name;
+    public Cake(){
+    }
+    public Cake(String id,String name){
+        this.id=id;
+        this.name=name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+//5-3
+public class CakeDB {
+    private static Map<String, Cake> cake = new LinkedHashMap<String,Cake>();
+    static {//预先生成对象
+        cake.put("1",new Cake("1","A类蛋糕"));
+        cake.put("2",new Cake("2","B类蛋糕"));
+        cake.put("3",new Cake("3","C类蛋糕"));
+        cake.put("4",new Cake("4","D类蛋糕"));
+        cake.put("5",new Cake("5","E类蛋糕"));
+    }
+    public static Collection<Cake> getAll(){
+        return cake.values();
+    }//获取所有的Cake对象的数据
+    public static Cake getCake(String id){
+        return cake.get(id);
+    }//获得单个Cake对象的数据
+}
+
+
+//5-4
+@WebServlet(name = "ListCakeServlet", value = "/ListCakeServlet")
+public class ListCakeServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");//设置中文编码
+        PrintWriter out=response.getWriter();
+        Collection<Cake> cakes=CakeDB.getAll();//获得所有蛋糕对象
+        out.write("本店提供以下蛋糕:<br>");//列出所有蛋糕对象
+        for(Cake cake:cakes){
+            String url= "PurchaseServlet?id="+cake.getId();//
+            out.write(cake.getName()+"<a href='"+url+"'>点击购买</a><br>");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+
+//5-5
+@WebServlet(name = "PurchaseServlet", value = "/PurchaseServlet")
+public class PurchaseServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        if(id==null){
+            String url="ListCakeServlet";
+            response.sendRedirect(url);//重定向
+            return;
+        }
+        Cake cake = CakeDB.getCake(id);
+        //创建或获得用户Session对象
+        HttpSession session=request.getSession();
+        List cart = (List) session.getAttribute("cart");
+        if(cart==null){
+            cart=new ArrayList<Cake>();
+            session.setAttribute("cart",cart);
+        }
+        cart.add(cake);
+        Cookie cookie=new Cookie("JSESSIONID",session.getId());
+        cookie.setMaxAge(60*30);
+        cookie.setPath("/Servlet");
+        response.addCookie(cookie);
+        response.sendRedirect("CartServlet");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+}
+
+
+//5-6
+@WebServlet(name = "CartServlet", value = "/CartServlet")//购物车Servlet
+public class CartServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");//设置中文编码
+        PrintWriter out=response.getWriter();
+        List<Cake> cart=null;//引用购物车队列
+        boolean pruFlag=true;//确认购物车内是否有物品
+        HttpSession session=request.getSession(false);
+        if(session==null){
+            pruFlag=false;
+        }else {
+            //获得用户购物车
+            cart=(List) session.getAttribute("cart");
+            if(cart==null)//如果购物车为空,则标记为false
+                pruFlag=false;
+        }
+        if(!pruFlag){//对购物车情形做出具体行为
+            out.write("您尚未购买任意商品.<br>");
+        }else {
+            //列出购物车内内容
+            out.write("您购买的商品有:<br>");
+            double price=0;
+            for(Cake cake:cart){
+                out.write(cake.getName()+"<br>");
+            }
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+
 ```
-![运行结果截图1...N]()
+![运行结果截图1...N](X.png)
+![运行结果截图1...N](X1.png)
+![运行结果截图1...N](X3.png)
 
 ```java
 /*文件5-7、文件5-8、文件5-9、文件5-10、文件5-11*/
+//5-7
+public class User {
+    private String username;
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+
+//5-8
+@WebServlet(name = "IndexServlet", value = "/IndexServlet")
+public class IndexServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        HttpSession session=request.getSession();
+        User user=(User) session.getAttribute("user");
+        if(user==null){
+            response.getWriter().print("未登录,请<a href='/login.html'>登录</a>");
+        }else {
+            response.getWriter().print("欢迎:"+user.getUsername()+".</br>");
+            response.getWriter().print("查询上次登录时间,<a href='/LastAccessServlet'>查询</a></br>");
+            response.getWriter().print("<a href='LogoutServlet'>退出</a>");
+            Cookie cookie=new Cookie("JSESSIONID",session.getId());//获取session自动创建的id后放入cookie
+            cookie.setMaxAge(60*30);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+
+//5-9
+@WebServlet(name = "LoginServlet", value = "/LoginServlet")
+public class LoginServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        String userName = request.getParameter("userName");
+        String password = request.getParameter("password");
+        PrintWriter pw = response.getWriter();
+        System.err.println(userName+";"+password);
+        if("root".equals(userName)&&"123".equals(password)) {
+            User user=new User();
+            user.setUsername(userName);
+            user.setPassword(password);
+            request.getSession().setAttribute("user",user);
+            response.sendRedirect("/IndexServlet");
+        }else {
+            pw.write("登陆失败,用户名或密码错误.");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+
+
+//5-10
+@WebServlet(name = "LogoutServlet", value = "/LogoutServlet")
+public class LogoutServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().removeAttribute("user");
+        response.sendRedirect("/IndexServlet");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
+
 ```
-![运行结果截图1...N]()
+![运行结果截图1...N](B1.png)
+![运行结果截图1...N](B2.png)
+![运行结果截图1...N](B3.png)
+![运行结果截图1...N](B4.png)
 
 ### 7. JSP的用法：用JSP技术重写书城首页、注册页面
 ```java
